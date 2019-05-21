@@ -12,21 +12,26 @@ class Product{
 
             url = '/manage/product/list.do';
             data.pageNum = listParam.pageNum;
+            data.pageSize = listParam.pageSize;
 
         } else if(listParam.listType==='search'){
             url = '/manage/product/search.do'
             data.pageNum = listParam.pageNum;
-            data[listParam.searchType] = listParam.keyword;
+            data.pageSize = listParam.pageSize;
+            data.listType = listParam.listType;
+            data[listParam.searchType]  = listParam.keyword;
+
+            
         }
 
         return _mm.request({
-            type:'post',
+            type:'GET',
             url:url,
-            data:FormData
+            data
         })
     }
 
-    
+
 
 
 }

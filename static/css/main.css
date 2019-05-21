@@ -55,6 +55,9 @@ a {
 .pagination {
     margin: 20px 0;
     text-align: right;
+    background: #fff;
+    /* float:right; */
+    padding:10px 20px;
 }
 
 .plugins-tips {

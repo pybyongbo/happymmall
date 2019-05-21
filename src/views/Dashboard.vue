@@ -108,19 +108,6 @@ h1.tit{
   margin-bottom: 20px;
 }
 
-/* .user-avator {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-}
-
-.user-info-cont {
-  padding-left: 50px;
-  flex: 1;
-  font-size: 14px;
-  color: #999;
-} */
-
 .user-info-cont div:first-child {
   font-size: 30px;
   color: #222;
