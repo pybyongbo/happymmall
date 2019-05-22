@@ -1,6 +1,5 @@
 <template>
     <div>
-        <!-- <h1>商品管理页面</h1> -->
         <div class="col-lg-12">
             <h1 class="page-header">商品管理</h1>
             <div class="page-header-right">
@@ -8,15 +7,14 @@
             </div>
         </div>
 
-         <div class="handle-box">
-
-                <el-select v-model="listParam.searchType" placeholder="筛选条件" class="handle-select mr10">
-                    <el-option key="1" label="按商品ID查询" value="productId"></el-option>
-                    <el-option key="2" label="按商品名称查询" value="productName"></el-option>
-                </el-select>
-                <el-input v-model="listParam.keyword" placeholder="筛选关键词" class="handle-input mr10" clearable></el-input>
-                <el-button type="primary" icon="search" @click="search">搜索</el-button>
-            </div>
+        <div class="handle-box">
+            <el-select v-model="listParam.searchType" placeholder="筛选条件" class="handle-select mr10">
+                <el-option key="1" label="按商品ID查询" value="productId"></el-option>
+                <el-option key="2" label="按商品名称查询" value="productName"></el-option>
+            </el-select>
+            <el-input v-model="listParam.keyword" placeholder="筛选关键词" class="handle-input mr10" clearable></el-input>
+            <el-button type="primary" icon="search" @click="search">搜索</el-button>
+        </div>
 
         <el-table
             :data="list"
@@ -35,7 +33,7 @@
             
             <el-table-column
             label="信息"
-            width="620">
+            width="840">
                 <template slot-scope="scope">
                     <div class="info">
                         <p>{{scope.row.name}}</p>
@@ -62,8 +60,19 @@
                 :type="scope.row.status === 1 ? 'danger' : 'success'"
                 disable-transitions>{{scope.row.status===1?'已下架':'在售'}}</el-tag>
 
-                <el-button @click="handleClick(scope.row)"  size="small">{{scope.row.status===1?'上架':'下架'}}</el-button>
+                <el-popover
+                width="160"
+                placement="right"
+                trigger="hover">
 
+                <p>商品上架表示在售状态,前台可以看到,已下架表示非在售状态,前台不显示.</p>
+                <div style="text-align: right; margin: 0">
+                    <el-button size="mini" type="text">取消</el-button>
+                    <el-button type="primary" size="mini" @click="onProductStatusChange(scope.row.id,scope.row.status)">确定</el-button>
+                </div>
+
+                <el-button slot="reference" size="small">{{scope.row.status===1?'上架':'下架'}}</el-button>
+                </el-popover>
             </template>
 
             </el-table-column>
@@ -71,7 +80,13 @@
             label="操作">
 
             <template slot-scope="scope">
-                <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                <el-button @click="toDetail(scope.row.id)" type="text" size="small">查看</el-button>
+                <!-- 
+                //两种写法方式都可以的
+                <router-link :to="`/product/detail/${scope.row.id}`" >
+                    查看
+                </router-link> 
+                -->
                 <el-button type="text" size="small">编辑</el-button>
             </template>
 
@@ -137,6 +152,28 @@ export default {
                 return 'background-color:lightblue;color:#fff;font-weight:500;text-align:center;height:30px;line-height:30px;'
             }
         },
+
+        // 改变商品状态，上架 / 下架
+        onProductStatusChange(productId,status){
+            let newStatus = status===1?2:1
+            _product.setProductStatus(productId,newStatus).then((res) => {
+                // _mm.successTips(res);
+                this.$message({
+                    message: res,
+                    type: 'success'
+                });
+                this.loadProductList();
+            },(errMsg) =>{
+                this.$message({
+                    message: res,
+                    type: 'error'
+                });
+                // _mm.errorTips(errMsg);
+            })
+
+
+        },
+
         handleClick(row) {
             console.log(row);
         },
@@ -163,6 +200,10 @@ export default {
             this.listParam.pageNum=1;
             this.loadProductList();
         },
+        toDetail(id) {
+            this.$router.push({path: '/product/detail/' + id});
+            // this.$router.push({ name: "Goods_Upload_List" });
+        }
     }
     
 }

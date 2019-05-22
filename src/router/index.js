@@ -29,7 +29,12 @@ export default new Router({
           {
               path: '/product/index',
               component: resolve => require(['../views/Productlist.vue'], resolve),
-              meta: { title: '商品管理' }
+              meta: { title: '商品列表' }
+        },
+        {
+          path: '/product/detail/:id',
+          component: resolve => require(['../views/Productdetail.vue'], resolve),
+          meta: { title: '商品详情' }
         },
         {
             path: '/category/index',
