@@ -59,9 +59,16 @@ class Product{
                 categoryId:parentCategoryId || 0
             }
         })
-
     }
 
+    //保存商品信息
+    saveProduct(product){
+        return _mm.request({
+            type:'post',
+            url:'/manage/product/save.do',
+            data:product
+        })
+    }
 
 
 

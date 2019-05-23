@@ -1,12 +1,14 @@
 <template>
     <div class="form-group">
-        <label for="name">所属分类:{{productDetail.parentCategoryId}}</label>
+        <label for="name">所属分类:</label>
         <div class="con">
-             <el-col :span="6">
-                <el-select class="mo-select" v-model="productDetail.parentCategoryId" placeholder="请选择">
+                <el-select class="mo-select" v-model="productDetail.parentCategoryId" :disabled="isEdit" @change="changepcid(productDetail.parentCategoryId)">
                     <el-option  v-for="item in firstCategoryList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
-            </el-col>
+
+                <el-select class="mo-select" v-if="productDetail.parentCategoryId" v-model="productDetail.categoryId" @change="changecid(productDetail.categoryId)" :disabled="isEdit">
+                    <el-option  v-for="item in secondCategoryList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                </el-select>
         </div>
     </div>
 </template>
@@ -27,10 +29,16 @@ export default {
             default:()=>{
                 return {}
             }
+        },
+        isEdit:{
+            type:Boolean,
+            default:true
         }
     },
     data(){
         return {
+            pcategoryId:0,
+            categoryId:0,
             firstCategoryId:0,
             firstCategoryList:[],
             secondCategoryId:0,
@@ -55,7 +63,11 @@ export default {
         //加载一级分类
        loadFirstCategory(){
            _product.getCategoryList(this.firstCategoryId).then(res=>{
+
                 this.firstCategoryList = Object.assign({},res);
+                this.loadSecondCategory(this.productDetail.parentCategoryId);
+               
+
             },errMsg=>{
                 this.$message({
                     message: res,
@@ -74,6 +86,22 @@ export default {
                     type: 'error'
                 });
             })
+        },
+        changepcid(val) {
+            console.log(val);
+            this.secondCategoryList = [];
+            this.pcategoryId = val;
+            this.loadSecondCategory(val);
+            //新增商品的时候传值
+            this.$emit('getpcategoryId',this.pcategoryId);
+        },
+
+        changecid(val){
+            this.categoryId = val;
+            //新增商品的时候传值
+            this.$emit('getcategoryId',this.categoryId);
+
+
         }
 
     }
@@ -91,6 +119,7 @@ export default {
 }
 
 .form-group .con .mo-select{
+    
     width:220px
 }
 </style>

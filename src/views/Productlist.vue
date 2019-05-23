@@ -3,7 +3,9 @@
         <div class="col-lg-12">
             <h1 class="page-header">商品管理</h1>
             <div class="page-header-right">
+                <router-link :to="`/product/save/`" >
                 <el-button type="primary" icon="delete" size="small" class="handle-del mr10">添加商品</el-button>
+                </router-link>
             </div>
         </div>
 
@@ -51,14 +53,14 @@
             <el-table-column
                 prop="status"
                 label="状态"
-                :filters="[{ text: '已下架', value: '1' }, { text: '在售', value: '2' }]"
+                :filters="[{ text: '在售', value: '1' }, { text: '已下架', value: '2' }]"
                 :filter-method="filterTag"
                 filter-placement="bottom-end"
              >
              <template slot-scope="scope">
                 <el-tag
-                :type="scope.row.status === 1 ? 'danger' : 'success'"
-                disable-transitions>{{scope.row.status===1?'已下架':'在售'}}</el-tag>
+                :type="scope.row.status === 1 ? 'success' : 'danger'"
+                disable-transitions>{{scope.row.status===1?'在售':'已下架'}}</el-tag>
 
                 <el-popover
                 width="160"
@@ -66,12 +68,12 @@
                 trigger="hover">
 
                 <p>商品上架表示在售状态,前台可以看到,已下架表示非在售状态,前台不显示.</p>
-                <div style="text-align: right; margin: 0">
-                    <el-button size="mini" type="text">取消</el-button>
-                    <el-button type="primary" size="mini" @click="onProductStatusChange(scope.row.id,scope.row.status)">确定</el-button>
+                <div style="text-align: center; margin: 10px auto">
+
+                    <el-button type="primary" size="mini" @click="onProductStatusChange(scope.row.id,scope.row.status)">确定{{scope.row.status===1?'下架':'上架'}}</el-button>
                 </div>
 
-                <el-button slot="reference" size="small">{{scope.row.status===1?'上架':'下架'}}</el-button>
+                <el-button slot="reference" size="small">{{scope.row.status===1?'下架':'上架'}}</el-button>
                 </el-popover>
             </template>
 
@@ -87,7 +89,9 @@
                     查看
                 </router-link> 
                 -->
-                <el-button type="text" size="small">编辑</el-button>
+                <router-link :to="`/product/save/${scope.row.id}`">
+                  <el-button type="text" size="small">编辑</el-button>
+                </router-link>
             </template>
 
             </el-table-column>

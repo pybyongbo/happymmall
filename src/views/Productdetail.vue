@@ -3,9 +3,6 @@
         <div class="tit">
             <h1>商品详情页面</h1>
             <div class="go-back">
-                <!-- 
-                    <a href="javascript:void(0);">返回</a>
-                 -->
                  <router-link :to="`/product/index`" >
                     返回
                 </router-link> 
@@ -31,20 +28,14 @@
                 <label for="name">当前状态:</label>
                 <div class="con">
                 <el-tag
-                :type="productDetail.status === 1 ? 'danger' : 'success'"
-                disable-transitions>{{productDetail.status===1?'已下架':'在售'}}</el-tag>
+                :type="productDetail.status === 1 ? 'success' : 'danger'"
+                disable-transitions>{{productDetail.status===1?'在售':'已下架'}}</el-tag>
 
                 </div>
             </div>
 
             <div class="form-group">
-                <!-- 
-                <label for="name">所属分类:</label>
-                <div class="con">
-                    <p>已下架</p>
-                </div> 
-                -->
-                <categoryselect :productDetail="productDetail"></categoryselect>
+                <categoryselect :productDetail="productDetail" :isEdit=true></categoryselect>
             </div>
 
             <div class="form-group">
@@ -70,7 +61,6 @@
                 <label for="name">商品图片:</label>
                 <div class="con">
                     <template>
-
                          <ul v-if="productDetail.subImages.length>0">
                             <li v-for="(pic,index) in productDetail.subImages" :key="index" class="thumbpic">
                                 <div>
@@ -139,9 +129,8 @@ export default {
             } else {
                 res.subImages = ''
             }
-            // res.subImages = res.subImages && this.getsubImage(res);
             this.productDetail = Object.assign({},res);
-            // console.log(this.productDetail.subImages)
+
         },errMsg=>{
             this.$message({
                     message: res,
@@ -169,13 +158,10 @@ export default {
 }
 
 .page-wrapper h1{
-    /* text-align: left; */
     padding-bottom: 9px;
     font-size: 18px;
     color: #666;
     float: left;
-
-
 }
 
 .page-wrapper .tit .go-back{

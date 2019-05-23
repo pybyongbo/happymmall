@@ -32,6 +32,12 @@ export default new Router({
               meta: { title: '商品列表' }
         },
         {
+          //编辑和新增共用一个模板页面,通过地址栏路由参数来判断.
+          path: '/product/save/:id?',
+          component: resolve => require(['../views/Productsave.vue'], resolve),
+          meta: { title: '商品新增/编辑' }
+        },
+        {
           path: '/product/detail/:id',
           component: resolve => require(['../views/Productdetail.vue'], resolve),
           meta: { title: '商品详情' }
