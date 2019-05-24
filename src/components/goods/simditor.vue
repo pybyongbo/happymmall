@@ -27,13 +27,25 @@
       this.editor = new Simditor(Object.assign({}, {
         textarea: $(`#${vm.id}`)
       }, this.options))
+      // console.log($(`#${vm.id}`));
       this.editor.on('valuechanged', (e, src) => {
-        this.valueChange(e, src)
+        this.valueChange(e, src);
+        // console.log(e);
       })
+
+      // this.editor.on('setDefaulval', (e, src) => {
+      //   this.setDefaulval(e, src)
+      //   console.log(e,src);
+      // })
+      this.setDefaulval();
     },
     methods: {
       valueChange(e, val) {
         this.$emit('change', this.editor.getValue())
+      },
+
+      setDefaulval(){
+        this.$emit('setvalue', this.editor.setValue())
       }
     }
   }

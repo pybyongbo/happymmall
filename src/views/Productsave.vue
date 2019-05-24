@@ -68,9 +68,11 @@
                 <label for="name">商品详情:</label>
                 <div class="con">
                    <Simditor
-                    id="textarea"
+                    id="txt-content"
                     :options="options"
-                    @change="change">
+                    @change="change"
+                    @setvalue="setvalue"
+                    >
                     </Simditor>
                 </div>
             </div>
@@ -105,7 +107,7 @@ export default {
             productInfo:{
                 categoryId          : 0,
                 parentCategoryId    : 0,
-                // id                  : '',
+                id                  :this.$route.params.id,
                 name                : '',
                 subtitle            : '',
                 subImages           : [],
@@ -115,6 +117,7 @@ export default {
                 status              : 1 //商品状态1为在售  
             },
             options: {
+
             placeHolder: 'this is placeHolder',
             toolbarFloat: false,
             toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'fontScale', 'color', '|', 'ol', 'ul', 'blockquote', 'code',  '|', 'link', 'image', 'hr', '|', 'indent', 'outdent', 'alignment',
@@ -130,7 +133,35 @@ export default {
             }
         }
     },
+    created(){
+
+        
+        this.loadProduct();
+        this.setvalue('1111');
+        // $("#textarea").val("1111");
+
+
+    },
     methods: {
+            //加载商品详情(编辑和新增共用一个模板)
+            loadProduct(){
+                //地址栏有id的时候,表示是编辑功能,需要表单回填
+                let pid = this.$route.params.id;
+                if(pid) {
+                    _product.getdetail(pid).then((res)=>{
+                        this.getSubImage(res);
+                        res.defaultDetail = res.detail;
+                        this.productInfo = Object.assign({},res);
+                    },(errMsg)=>{
+                        this.$message({
+                            message: res,
+                            type: 'error'
+                        });
+                    })
+                }
+
+            },
+
             handleRemove(file, fileList) {
                 console.log(file, fileList);
             },
@@ -171,6 +202,15 @@ export default {
                 this.productInfo = Object.assign({},this.productInfo,{
                     detail:val
                 })
+            },
+            setvalue(val) {
+
+                console.log("111111----");
+                // this.productInfo = Object.assign({},this.productInfo,{
+                //     defaultDetail:'123132131'
+                // });
+                console.log(val);
+
             },
             getpcategoryId(val){
                 this.productInfo = Object.assign({},this.productInfo,{
