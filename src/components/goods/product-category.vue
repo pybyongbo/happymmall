@@ -101,7 +101,6 @@ export default {
             //新增商品的时候传值
             this.$emit('getcategoryId',this.categoryId);
 
-
         }
 
     }

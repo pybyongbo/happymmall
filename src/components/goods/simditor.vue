@@ -37,15 +37,18 @@
       //   this.setDefaulval(e, src)
       //   console.log(e,src);
       // })
-      this.setDefaulval();
+      // this.setDefaultVal();
     },
     methods: {
       valueChange(e, val) {
         this.$emit('change', this.editor.getValue())
       },
 
-      setDefaulval(){
-        this.$emit('setvalue', this.editor.setValue())
+      setDefaultVal(val){
+        // this.$emit('setvalue', this.editor.setValue())
+        //触发父组件的方法,填充编辑器的值
+         this.editor.setValue(val);
+
       }
     }
   }

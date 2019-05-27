@@ -25,7 +25,7 @@
             </div>
 
             <div class="form-group">
-                <categoryselect :isEdit=false @getpcategoryId="getpcategoryId" @getcategoryId="getcategoryId"></categoryselect>
+                <categoryselect :isEdit=false :productDetail="productInfo" @getpcategoryId="getpcategoryId"  @getcategoryId="getcategoryId"></categoryselect>
             </div>
 
             <div class="form-group">
@@ -39,7 +39,7 @@
             </div>
 
             <div class="form-group">
-                <label style="line-height:68px;">商品库存:</label>
+                <label style="line-height:62px;">商品库存:</label>
                 <div class="con">
                     <el-input v-model="productInfo.stock" >
                         <template slot="append">件</template>
@@ -56,6 +56,7 @@
                         :on-preview="handlePreview"
                         :on-remove="handleRemove"
                         :on-success="uploadSUccess"
+                        :file-list="productInfo.subImages"
                         name="upload_file"
                         list-type="picture">
                         <el-button size="small" type="primary">点击上传</el-button>
@@ -68,10 +69,10 @@
                 <label for="name">商品详情:</label>
                 <div class="con">
                    <Simditor
+                    ref="soncom"
                     id="txt-content"
                     :options="options"
                     @change="change"
-                    @setvalue="setvalue"
                     >
                     </Simditor>
                 </div>
@@ -134,13 +135,7 @@ export default {
         }
     },
     created(){
-
-        
         this.loadProduct();
-        this.setvalue('1111');
-        // $("#textarea").val("1111");
-
-
     },
     methods: {
             //加载商品详情(编辑和新增共用一个模板)
@@ -149,9 +144,18 @@ export default {
                 let pid = this.$route.params.id;
                 if(pid) {
                     _product.getdetail(pid).then((res)=>{
-                        this.getSubImage(res);
-                        res.defaultDetail = res.detail;
-                        this.productInfo = Object.assign({},res);
+                          this.getSubImage(res);
+                        // console.log(this.getSubImage(res));
+                        // res.defaultDetail = res.detail;
+                        console.log(res);
+                        this.productInfo = Object.assign({},res,{
+                            subImages:this.getSubImage(res)
+                        });
+                        console.log(this.productInfo.subImages)
+                        console.log("-----");
+                        console.log(this.getSubImagesString(this.productInfo.subImages));
+                        this.$refs.soncom.setDefaultVal(this.productInfo.detail); 
+
                     },(errMsg)=>{
                         this.$message({
                             message: res,
@@ -159,7 +163,6 @@ export default {
                         });
                     })
                 }
-
             },
 
             handleRemove(file, fileList) {
@@ -170,13 +173,15 @@ export default {
             },
             uploadSUccess(msg, file) {
                 //附件上传成功回调
-                console.log(msg);
-
-                console.log(file);
                 if (msg.status === 0) {
                     
                     let subImages = this.productInfo.subImages;
-                    subImages.push(file.response.data.uri);
+                    console.log(file);
+                    let fileObj = {
+                        name: file.name,
+                        url: file.response.data.url,
+                    };
+                    subImages.push(fileObj);
                 } else {
                     this.$message({
                         message: msg.msg,
@@ -186,31 +191,34 @@ export default {
             },
              //将uri数组转变成与uploader返回值一样的{uri,url}形式数组，方便显示图片
             getSubImage(res){
-                let images = res.subImages.split(',');
-                res.subImages = images.map((imgUri) => {
+               let images;
+               console.log(res);
+               res.subImages? images = res.subImages.split(','):'';
+               if(res.subImages!=null && res.subImages!='') {
+                   res.subImages = images.map((imgUri) => {
                     return {
                         uri: imgUri,
                         url: res.imageHost + imgUri
                     }
                 });
+               } else {
+                   return [];
+               }
+                
             },
             getSubImagesString(){
-                return this.productInfo.subImages.map((image) => image.uri).join(',');
+                // console.log(this.productInfo.subImages);
+                if(this.productInfo.subImages!=''&&this.productInfo.subImages!=null) {
+                    return this.productInfo.subImages.map((image) => image.uri).join(',');
+                } else{
+                    return [];
+                }
             },
             change(val){
-                console.log(val)  //以html格式获取simditor的正文内容
+                //以html格式获取simditor的正文内容
                 this.productInfo = Object.assign({},this.productInfo,{
                     detail:val
                 })
-            },
-            setvalue(val) {
-
-                console.log("111111----");
-                // this.productInfo = Object.assign({},this.productInfo,{
-                //     defaultDetail:'123132131'
-                // });
-                console.log(val);
-
             },
             getpcategoryId(val){
                 this.productInfo = Object.assign({},this.productInfo,{
@@ -225,12 +233,25 @@ export default {
             onSubmit(){
 
                 
-                this.productInfo = Object.assign({},this.productInfo,{
-                    subImages:this.productInfo.subImages.join(',')
-                });
-                console.log(this.productInfo);
-                // return;
-                _product.saveProduct(this.productInfo).then((res) => {
+                // this.productInfo = Object.assign({},this.productInfo,{
+                //     subImages:this.getSubImagesString(this.productInfo.subImages)
+                // });
+                let product = {
+                    name        : this.productInfo.name,
+                    subtitle    : this.productInfo.subtitle,
+                    categoryId  : parseInt(this.productInfo.categoryId),
+                    subImages   : this.getSubImagesString(this.productInfo.subImages),
+                    detail      : this.productInfo.detail,
+                    price       : parseFloat(this.productInfo.price),
+                    stock       : parseInt(this.productInfo.stock),
+                    status      : this.productInfo.status
+                }
+                console.log(product);
+                if(this.$route.params.id){
+                    product.id = parseInt(this.$route.params.id);
+                }
+                console.log(product);
+                _product.saveProduct(product).then((res) => {
                     // _mm.successTips(res);
                     this.$message({
                         message: res,
