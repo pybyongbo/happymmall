@@ -50,7 +50,14 @@
       <div class="form-group batchUpload">
         <label>商品图片:</label>
         <div class="con">
-          <el-upload class="upload-demo" action="/manage/product/upload.do" :on-preview="handlePreview" :on-remove="handleRemove" :on-success="uploadSUccess" :file-list="productInfo.subImages" name="upload_file" list-type="picture">
+      
+          <el-upload 
+          class="upload-demo" 
+          action="/manage/product/upload.do" 
+          :on-preview="handlePreview" 
+          :on-remove="handleRemove" 
+          :on-success="uploadSUccess" 
+          :file-list="uploadArr" name="upload_file" list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
@@ -134,12 +141,41 @@ export default {
           this.getSubImage(res);
           // console.log(this.getSubImage(res));
           // res.defaultDetail = res.detail;
-          console.log(res);
           this.productInfo = Object.assign({}, res);
+          console.log(res.subImages!='' && res.subImages!= null);
+          // this.uploadArr.push({
+          //       name:res.subImages.name,
+          //       uri:res.subImages.url,
+          //       url:res.subImages.url
+
+          //     });
+          // console.log(res.subImages[0].url);
+          if(res.subImages!='' && res.subImages!= null) {
+
+
+            res.subImages.forEach(item => {
+                console.log(item);
+                this.uploadArr.push({
+                  uri: item.uri,
+                  url: item.url,
+                });
+                return this.uploadArr
+            });
+            console.log(res.subImages)
+            //多张图片请求,则有逗号隔开
+            // if(res.subImages.indexOf(',')) {
+
+            // } else{
+              
+
+          } else {
+
+          }
+          
           // this.productInfo.subImages.push(res.subImages)
-          console.log(this.productInfo.subImages)
-          console.log("-----");
-          console.log(this.getSubImagesString(this.productInfo.subImages));
+          // console.log(this.productInfo.subImages)
+          // console.log("-----");
+          // console.log(this.getSubImagesString(this.productInfo.subImages));
           this.$refs.soncom.setDefaultVal(this.productInfo.detail);
 
         }, (errMsg) => {
@@ -168,8 +204,8 @@ export default {
           uri: file.response.data.uri,
           url: file.response.data.url
         };
-        this.productInfo.subImages.push(fileObj);
-        this.uploadArr.push(file.response.data.uri)
+        // this.productInfo.subImages.push(fileObj);
+        this.uploadArr.push(fileObj)
       } else {
         this.$message({
           message: msg.msg,
@@ -197,11 +233,13 @@ export default {
     },
     getSubImagesString() {
       // console.log(this.productInfo.subImages);
-      if (this.productInfo.subImages != '' && this.productInfo.subImages != null) {
+      //if (this.productInfo.subImages != '' && this.productInfo.subImages != null) {
         // return this.productInfo.subImages.map((image) => image.uri).join(',');
-      } else {
-        return [];
-      }
+      // } else {
+      //   return [];
+      // }
+
+      return this.uploadArr.map((image) => image.uri).join(',');
     },
     change(val) {
       //以html格式获取simditor的正文内容
@@ -238,12 +276,13 @@ export default {
         stock: parseInt(this.productInfo.stock),
         status: this.productInfo.status
       }
-      console.log(product);
+
       if (this.$route.params.id) {
         product.id = parseInt(this.$route.params.id);
-        product.subImages = this.uploadArr.join(',');
+        product.subImages = this.getSubImagesString();
       }
       console.log(product);
+      // return;
       _product.saveProduct(product).then((res) => {
         // _mm.successTips(res);
         this.$message({
