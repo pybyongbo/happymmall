@@ -10,57 +10,59 @@
         </div>
 
         <div class="pro-detail">
-
+          <el-form :model="productDetail" disabled ref="ruleForm" :inline=true class="demo-ruleForm">
             <div class="form-group">
-                <label for="name">商品名称:</label>
-                <div class="con">
-                    <p>{{productDetail.name}}</p>
-                </div>
+                <el-form-item label="商品名称:">
+                     <p>{{productDetail.name}}</p>
+                </el-form-item>
             </div>
             <div class="form-group">
-                <label for="name">商品描述:</label>
-                <div class="con">
-                    <p>{{productDetail.subtitle}}</p>
-                </div>
+                <el-form-item label="商品名称:">
+                     <p>{{productDetail.subtitle}}</p>
+                </el-form-item>
             </div>
 
             <div class="form-group">
-                <label for="name">当前状态:</label>
-                <div class="con">
+                <el-form-item label="当前状态:">
                 <el-tag
                 :type="productDetail.status === 1 ? 'success' : 'danger'"
                 disable-transitions>{{productDetail.status===1?'在售':'已下架'}}</el-tag>
-
-                </div>
+                </el-form-item>
             </div>
 
             <div class="form-group">
+                <!-- <el-form-item label="所属分类:"> -->
                 <categoryselect :productDetail="productDetail" :isEdit=true></categoryselect>
+                <!-- </el-form-item> -->
             </div>
 
             <div class="form-group">
-                <label for="name">商品价格:</label>
+                <!-- <label for="name">商品价格:</label>
                 <div class="con">
                      <el-input placeholder="请输入内容" v-model="productDetail.price" disabled>
                         <template slot="prepend">¥ </template>
                         <template slot="append">元</template>
                     </el-input>
-                </div>
+                </div> -->
+                 <el-form-item label="商品价格:">
+                      <el-input placeholder="请输入内容" v-model="productDetail.price" style="width:390px;">
+                        <template slot="prepend">¥ </template>
+                        <template slot="append">元</template>
+                    </el-input>
+                </el-form-item>
             </div>
 
             <div class="form-group">
-                <label for="name">商品库存:</label>
-                <div class="con">
-                    <el-input v-model="productDetail.stock" disabled>
+                 <el-form-item label="商品库存:">
+                       <el-input v-model="productDetail.stock" style="width:390px;">
                         <template slot="append">件</template>
                     </el-input>
-                </div>
+                 </el-form-item>
             </div>
 
             <div class="form-group">
-                <label for="name">商品图片:</label>
-                <div class="con">
-                    <template>
+                <el-form-item label="商品图片:">
+                      <template>
                          <ul v-if="productDetail.subImages.length>0">
                             <li v-for="(pic,index) in productDetail.subImages" :key="index" class="thumbpic">
                                 <div>
@@ -68,21 +70,21 @@
                                 </div>
                             </li>
                         </ul>
-
                         <div v-else class="pull-right">
                         <span style="color:red;font-weight:bold">暂未上传商品图片</span>
                         </div>
                     </template>
-                </div>
+                 </el-form-item>
             </div>
 
              <div class="form-group">
-                <label for="name">商品详情:</label>
-                <div class="con">
+                <el-form-item label="商品详情:">
+                    <div class="con">
                     <p v-html="productDetail.detail || '--'"></p>
                 </div>
+                </el-form-item>
             </div>
-
+          </el-form>
         </div>
     </div>
 </template>
@@ -173,8 +175,7 @@ export default {
 }
 
 .page-wrapper .tit .go-back a{
-    /* color:#000; */
-        color: #409EFF;
+    color: #409EFF;
 }
 .pro-detail{
     width:96%;
@@ -184,31 +185,37 @@ export default {
 .pro-detail .form-group{
     text-align: left;
     overflow: hidden;
-    margin-bottom:20px;
+
     line-height: 40px;
 }
 
 .pro-detail .form-group label{
     float:left;
 }
-.pro-detail .form-group .con{
-    width:60%;
-    margin-left:20px;
+.pro-detail .form-group{
+    width:100%;
+    margin-left:0px;
+    /* float:left; */
+    overflow: hidden;
+}
+
+.pro-detail .form-group label{
     float:left;
 }
-.pro-detail .form-group .con ul li{
+
+.pro-detail .form-group ul li{
     list-style-type:none;
 }
-.pro-detail .form-group .con ul li.thumbpic{
+.pro-detail .form-group ul li.thumbpic{
     float:left;
     margin-right:10px;
     height:80px;
     padding:5px;
     border:2px solid #f00;
 }
-.pro-detail .form-group .con ul li.thumbpic img{
-    max-width:100px;
-    max-height:80px;
+.pro-detail .form-group ul li.thumbpic img{
+    width:100px;
+    height:80px;
 }
 </style>
 

@@ -25,7 +25,7 @@
 
       <el-table-column label="信息">
         <template slot-scope="scope">
-          <div class="info">
+          <div class="info" style="text-align:left;">
             <p>{{scope.row.name}}</p>
             {{scope.row.subtitle}}
           </div>
@@ -40,12 +40,9 @@
       <el-table-column prop="status" label="状态" :filters="[{ text: '在售', value: '1' }, { text: '已下架', value: '2' }]" :filter-method="filterTag" filter-placement="bottom-end">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'" disable-transitions>{{scope.row.status===1?'在售':'已下架'}}</el-tag>
-
           <el-popover width="160" placement="right" trigger="hover">
-
             <p>商品上架表示在售状态,前台可以看到,已下架表示非在售状态,前台不显示.</p>
             <div style="text-align: center; margin: 10px auto">
-
               <el-button type="primary" size="mini" @click="onProductStatusChange(scope.row.id,scope.row.status)">确定{{scope.row.status===1?'下架':'上架'}}</el-button>
             </div>
 
@@ -141,8 +138,6 @@ export default {
         });
         // _mm.errorTips(errMsg);
       })
-
-
     },
 
     handleClick(row) {
@@ -191,6 +186,7 @@ export default {
   font-size: 18px;
   color: #666;
   float: left;
+  line-height:40px;
 }
 
 .col-lg-12 .page-header-right {

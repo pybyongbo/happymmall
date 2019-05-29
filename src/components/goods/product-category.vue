@@ -1,5 +1,6 @@
 <template>
     <div class="form-group">
+        <!-- 
         <label for="name">所属分类:</label>
         <div class="con">
                 <el-select class="mo-select" v-model="productDetail.parentCategoryId" :disabled="isEdit" @change="changepcid(productDetail.parentCategoryId)">
@@ -10,6 +11,18 @@
                     <el-option  v-for="item in secondCategoryList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
         </div>
+         -->
+        <!-- <el-form :model="productDetail"> -->
+        <el-form-item label="所属分类:" prop="">
+            <el-select class="mo-select" v-model="productDetail.parentCategoryId" :disabled="isEdit" @change="changepcid(productDetail.parentCategoryId)">
+                    <el-option  v-for="item in firstCategoryList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                </el-select>
+
+                <el-select class="mo-select" v-if="productDetail.parentCategoryId" v-model="productDetail.categoryId" @change="changecid(productDetail.categoryId)" :disabled="isEdit">
+                    <el-option  v-for="item in secondCategoryList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                </el-select>
+        </el-form-item>
+         <!-- </el-form> -->
     </div>
 </template>
 

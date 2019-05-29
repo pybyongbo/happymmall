@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrapper">
     <div class="tit">
-      <h1>商品管理--新增商品</h1>
+      <h1>商品管理--{{this.$route.params.id?'编辑':'新增'}}商品</h1>
       <div class="go-back">
         <router-link :to="`/product/index`">
           返回
@@ -10,45 +10,47 @@
     </div>
 
     <div class="pro-detail">
-
+      <el-form :model="productInfo" :rules="rules" ref="productForm" label-width="100px" class="demo-ruleForm">
       <div class="form-group">
-        <label for="name">商品名称:</label>
+        <!-- <label for="name">商品名称:</label>
         <div class="con">
           <el-input v-model="productInfo.name"></el-input>
-        </div>
+        </div> -->
+          <el-form-item label="商品名称:" prop="name">
+            <el-input v-model="productInfo.name"></el-input>
+          </el-form-item>
       </div>
       <div class="form-group">
-        <label for="name">商品描述:</label>
-        <div class="con">
-          <el-input v-model="productInfo.subtitle"></el-input>
-        </div>
+        <el-form-item label="商品描述:" prop="subtitle">
+            <el-input v-model="productInfo.subtitle"></el-input>
+        </el-form-item>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" >
+        <!-- <el-form-item label="所属分类:" prop="productDetail"> -->
         <categoryselect :isEdit=false :productDetail="productInfo" @getpcategoryId="getpcategoryId" @getcategoryId="getcategoryId"></categoryselect>
+        <!-- </el-form-item> -->
       </div>
 
       <div class="form-group">
-        <label for="name">商品价格:</label>
-        <div class="con">
-          <el-input placeholder="请输入内容" v-model="productInfo.price">
-            <template slot="prepend">¥ </template>
-            <template slot="append">元</template>
-          </el-input>
-        </div>
+        <el-form-item label="商品价格:" prop="price">
+            <el-input v-model="productInfo.price">
+              <template slot="prepend">¥ </template>
+              <template slot="append">元</template>
+            </el-input>
+        </el-form-item>
       </div>
 
       <div class="form-group">
-        <label style="line-height:62px;">商品库存:</label>
-        <div class="con">
-          <el-input v-model="productInfo.stock">
-            <template slot="append">件</template>
-          </el-input>
-        </div>
+        <el-form-item label="商品库存:" prop="stock">
+              <el-input v-model="productInfo.stock">
+                  <template slot="append">件</template>
+              </el-input>
+        </el-form-item>
       </div>
 
       <div class="form-group batchUpload">
-        <label>商品图片:</label>
+        <!-- <label>商品图片:</label>
         <div class="con">
       
           <el-upload 
@@ -61,21 +63,41 @@
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
-        </div>
+        </div> -->
+
+        <el-form-item label="商品图片:">
+          <el-upload 
+          class="upload-demo" 
+          action="/manage/product/upload.do" 
+          :on-preview="handlePreview" 
+          :on-remove="handleRemove" 
+          :on-success="uploadSUccess" 
+          :file-list="uploadArr" name="upload_file" list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+             
+        </el-form-item>
       </div>
 
       <div class="form-group">
-        <label for="name">商品详情:</label>
+        <!-- <label for="name">商品详情:</label>
         <div class="con">
           <Simditor ref="soncom" id="txt-content" :options="options" @change="change">
           </Simditor>
-        </div>
+        </div> -->
+        <el-form-item label="商品详情:">
+             <Simditor ref="soncom" id="txt-content" :options="options" @change="change">
+             </Simditor>
+        </el-form-item>
       </div>
 
       <div class="btn">
-        <el-button type="primary" size="small" class="handle-del mr10" @click="onSubmit()">提交</el-button>
-      </div>
 
+        <el-button type="primary" size="small" class="handle-del mr10" @click="onSubmit()">提交</el-button>
+
+      </div>
+      </el-form>
     </div>
   </div>
 </template>
@@ -97,12 +119,22 @@ export default {
     Simditor
   },
   data() {
+    let validatePrice = (rule, value, callback) => {
+            if (value == '') {
+                callback(new Error('请输入商品价格'));
+            } else if(value<=0){
+                callback(new Error('商品价格需大于0'));
+            }else if (!/^(\d|[1-9]\d+)(\.\d{0,5})?$/.test(value)) {
+                callback(new Error('请输入正确金额,小数点后最多五位'));
+            } else {
+                callback();
+            }
+      };
     return {
       uploadArr: [],
       productInfo: {
         categoryId: 0,
         parentCategoryId: 0,
-        // id: this.$route.params.id,
         name: '',
         subtitle: '',
         subImages: [],
@@ -125,6 +157,25 @@ export default {
           connectionCount: 3,
           leaveConfirm: '正在上传文件'
         }
+      },
+      rules:{
+          name: [
+            { required: true, message: '请输入商品名称', trigger: 'change' }
+          ],
+          subtitle:[ { required: true, message: '请输入商品描述', trigger: 'change' },
+            { min: 3, max: 100, message: '长度在 3 到 100 个字符', trigger: 'change' }
+          ],
+          price:[
+            { required: true, validator: validatePrice, trigger: 'change' }
+          ],
+          stock:[
+             {
+                        required: true,
+                        pattern: /^[0-9]+$/,
+                        message: '商品库存应为正整数',
+                        trigger: 'change'
+            }
+          ]
       }
     }
   },
@@ -138,46 +189,18 @@ export default {
       let pid = this.$route.params.id;
       if (pid) {
         _product.getdetail(pid).then((res) => {
-          this.getSubImage(res);
-          // console.log(this.getSubImage(res));
-          // res.defaultDetail = res.detail;
-          this.productInfo = Object.assign({}, res);
-          console.log(res.subImages!='' && res.subImages!= null);
-          // this.uploadArr.push({
-          //       name:res.subImages.name,
-          //       uri:res.subImages.url,
-          //       url:res.subImages.url
-
-          //     });
-          // console.log(res.subImages[0].url);
-          if(res.subImages!='' && res.subImages!= null) {
-
-
-            res.subImages.forEach(item => {
-                console.log(item);
-                this.uploadArr.push({
-                  uri: item.uri,
-                  url: item.url,
+            this.getSubImage(res);
+            this.productInfo = Object.assign({}, res);
+            if(res.subImages!='' && res.subImages!= null) {
+                res.subImages.forEach(item => {
+                    this.uploadArr.push({
+                      uri: item.uri,
+                      url: item.url,
+                    });
+                    return this.uploadArr
                 });
-                return this.uploadArr
-            });
-            console.log(res.subImages)
-            //多张图片请求,则有逗号隔开
-            // if(res.subImages.indexOf(',')) {
-
-            // } else{
-              
-
-          } else {
-
-          }
-          
-          // this.productInfo.subImages.push(res.subImages)
-          // console.log(this.productInfo.subImages)
-          // console.log("-----");
-          // console.log(this.getSubImagesString(this.productInfo.subImages));
-          this.$refs.soncom.setDefaultVal(this.productInfo.detail);
-
+            } 
+            this.$refs.soncom.setDefaultVal(this.productInfo.detail);
         }, (errMsg) => {
           this.$message({
             message: res,
@@ -189,6 +212,9 @@ export default {
 
     handleRemove(file, fileList) {
       console.log(file, fileList);
+      let index = this.uploadArr.findIndex(item => item.uid === file.uid);
+      this.uploadArr.splice(index, 1);
+
     },
     handlePreview(file) {
       console.log(file);
@@ -216,7 +242,6 @@ export default {
     //将uri数组转变成与uploader返回值一样的{uri,url}形式数组，方便显示图片
     getSubImage(res) {
       let images;
-      console.log(res);
       res.subImages ? images = res.subImages.split(',') : '';
       if (res.subImages != null && res.subImages != '') {
         res.subImages = images.map((imgUri) => {
@@ -229,16 +254,8 @@ export default {
       } else {
         return [];
       }
-
     },
     getSubImagesString() {
-      // console.log(this.productInfo.subImages);
-      //if (this.productInfo.subImages != '' && this.productInfo.subImages != null) {
-        // return this.productInfo.subImages.map((image) => image.uri).join(',');
-      // } else {
-      //   return [];
-      // }
-
       return this.uploadArr.map((image) => image.uri).join(',');
     },
     change(val) {
@@ -259,40 +276,45 @@ export default {
     },
     onSubmit() {
 
-
-      // this.productInfo = Object.assign({},this.productInfo,{
-      //     subImages:this.getSubImagesString(this.productInfo.subImages)
-      // });
-
-      // this.getSubImagesString(this.productInfo.subImages).indexOf(',')>
       let product = {
         name: this.productInfo.name,
         subtitle: this.productInfo.subtitle,
         categoryId: parseInt(this.productInfo.categoryId),
-        // subImages: this.getSubImagesString(this.productInfo.subImages),
-        subImages: this.uploadArr.join(','),
+        subImages: this.getSubImagesString(), //图片提交转化成字符串提交
         detail: this.productInfo.detail,
         price: parseFloat(this.productInfo.price),
         stock: parseInt(this.productInfo.stock),
         status: this.productInfo.status
       }
 
-      if (this.$route.params.id) {
+      if (this.$route.params.id) { //编辑商品的情况,要传递id过去
         product.id = parseInt(this.$route.params.id);
-        product.subImages = this.getSubImagesString();
-      }
-      console.log(product);
-      // return;
-      _product.saveProduct(product).then((res) => {
-        // _mm.successTips(res);
-        this.$message({
-          message: res,
-          type: 'success'
-        });
-        this.$router.push('/product/index');
-      }, (errMsg) => {
-        _mm.errorTips(errMsg);
-      });
+      } 
+
+       this.$refs['productForm'].validate((valid) => {
+
+         if(valid) {
+
+            _product.saveProduct(product).then((res) => {
+              this.$message({
+                message: res,
+                type: 'success'
+              });
+              this.$router.push('/product/index');
+            }, (errMsg) => {
+              _mm.errorTips(errMsg);
+            });
+
+         } else{
+            console.log('error submit!!');
+            return false;
+         }
+
+
+       })
+
+     
+
 
     }
   }
@@ -329,18 +351,16 @@ export default {
   width: 96%;
   margin: 40px auto 0;
 }
-
 .pro-detail .form-group {
-  text-align: left;
-  overflow: hidden;
-  margin-bottom: 20px;
-  line-height: 40px;
+    width:60%;
+    text-align: left;
+    overflow: hidden;
+    line-height: 40px;
 }
 
 .pro-detail .form-group label {
   float: left;
 }
-
 .pro-detail .form-group .con {
   width: 60%;
   margin-left: 20px;
@@ -366,7 +386,7 @@ export default {
 
 
 .btn {
-  margin-left: 90px;
+  margin-left: 100px;
   float: left;
   padding-bottom: 30px;
 }

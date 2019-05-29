@@ -46,20 +46,29 @@ class Product{
             }
         });
     }
+
+    //获取商品品类列表
+    getCategoryList(productId){
+        return _mm.request({
+            url     : '/manage/category/get_category.do',
+            data    : {
+                productId : productId
+            }
+        });
+    }
     /**
      * 品类相关
      * 根据父品类id获取品类列表数据
     */
-    getCategoryList(parentCategoryId) {
-
-        return _mm.request({
-            // type:'GET',
-            url:'/manage/category/get_category.do',
-            data:{
-                categoryId:parentCategoryId || 0
-            }
-        })
-    }
+    getCategoryList(parentCategoryId){
+            return _mm.request({
+                type    : 'get',
+                url     : '/manage/category/get_category.do',
+                data    : {
+                    categoryId : parentCategoryId || 0
+                }
+            });
+        }
 
     //保存商品信息
     saveProduct(product){
@@ -68,6 +77,16 @@ class Product{
             url:'/manage/product/save.do',
             data:product
         })
+    }
+
+    //修改品类名称
+    updateCategoryName(category) {
+        return _mm.request({
+            type:'GET',
+            url:'/manage/category/set_category_name.do',
+            data:category
+        })
+
     }
 
 
