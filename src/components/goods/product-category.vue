@@ -14,7 +14,7 @@
          -->
         <!-- <el-form :model="productDetail"> -->
         <el-form-item label="所属分类:" prop="">
-            <el-select class="mo-select" v-model="productDetail.parentCategoryId" :disabled="isEdit" @change="changepcid(productDetail.parentCategoryId)">
+            <el-select class="mo-select" v-model="productDetail.parentCategoryId" :disabled="isEdit" @change="changepcid(productDetail.parentCategoryId)" >
                     <el-option  v-for="item in firstCategoryList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
 
@@ -113,9 +113,7 @@ export default {
             this.categoryId = val;
             //新增商品的时候传值
             this.$emit('getcategoryId',this.categoryId);
-
         }
-
     }
     
 }

@@ -170,10 +170,10 @@ export default {
           ],
           stock:[
              {
-                        required: true,
-                        pattern: /^[0-9]+$/,
-                        message: '商品库存应为正整数',
-                        trigger: 'change'
+                required: true,
+                pattern: /^[0-9]+$/,
+                message: '商品库存应为正整数',
+                trigger: 'change'
             }
           ]
       }
@@ -309,13 +309,7 @@ export default {
             console.log('error submit!!');
             return false;
          }
-
-
        })
-
-     
-
-
     }
   }
 }
@@ -352,7 +346,7 @@ export default {
   margin: 40px auto 0;
 }
 .pro-detail .form-group {
-    width:60%;
+    width:68%;
     text-align: left;
     overflow: hidden;
     line-height: 40px;

@@ -18,7 +18,7 @@
       <el-button type="primary" icon="search" @click="search">搜索</el-button>
     </div>
 
-    <el-table :data="list" border :row-style="tableRowStyle" :header-cell-style="tableHeaderColor" class="prolist" style="width: 100%">
+    <el-table :data="list" border v-loading="loading" :row-style="tableRowStyle" :header-cell-style="tableHeaderColor" class="prolist" style="width: 100%">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="id" label="ID" width="80">
       </el-table-column>
@@ -85,6 +85,7 @@ export default {
   name: 'productlist',
   data() {
     return {
+      loading:true,
       cur_page: 1,
       totalCount: 0,
       list: [],
@@ -107,6 +108,7 @@ export default {
     loadProductList() {
       _product.getProductList(this.listParam).then((res) => {
         this.list = res.list;
+        this.loading = false;
         this.totalCount = res.total;
       })
     },

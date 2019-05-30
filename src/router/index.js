@@ -48,6 +48,16 @@ export default new Router({
             meta: { title: '品类管理' }
         },
         {
+          path: '/category/add',
+          component: resolve => require(['../views/Categoryadd.vue'], resolve),
+          meta: { title: '品类管理' }
+      },
+        {
+          path: '/category/index/:id',
+          component: resolve => require(['../views/Categorylistitem.vue'], resolve),
+          meta: {title: '品类管理'}
+        },
+        {
             path: '/order/index',
             component: resolve => require(['../views/Orderlist.vue'], resolve),
             meta: { title: '订单管理' }
