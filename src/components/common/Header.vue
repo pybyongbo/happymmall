@@ -31,12 +31,12 @@
                             {{username}} <i class="el-icon-caret-bottom"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <a href="www.901web.com" target="_blank">
-                            <el-dropdown-item>关于作者</el-dropdown-item>
-                        </a>
-                        <a href="javascript:void(0);" target="_blank">
-                            <el-dropdown-item>项目仓库</el-dropdown-item>
-                        </a>
+                            <a href="https://901web.com/about" target="_blank">
+                                <el-dropdown-item>关于作者</el-dropdown-item>
+                            </a>
+                            <a href="https://github.com/pybyongbo/happymmall" target="_blank">
+                                <el-dropdown-item>项目仓库</el-dropdown-item>
+                            </a>
                         <el-dropdown-item divided  command="loginout">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>

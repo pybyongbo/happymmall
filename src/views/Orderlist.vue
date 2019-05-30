@@ -6,18 +6,18 @@
 
     <div class="handle-box">
       <el-select v-model="listParam.searchType" placeholder="筛选条件" class="handle-select mr10">
-        <el-option key="1" label="按订单号查询" value="productId"></el-option>
+        <el-option key="1" label="按订单号查询" value="orderNo"></el-option>
       </el-select>
-      <el-input v-model="listParam.keyword" placeholder="订单号" class="handle-input mr10" clearable></el-input>
+      <el-input v-model="listParam.orderNo" placeholder="订单号" class="handle-input mr10" clearable></el-input>
       <el-button type="primary" icon="search" @click="search">搜索</el-button>
     </div>
 
     <el-table :data="list" border stripe v-loading="loading" :row-style="tableRowStyle" :header-cell-style="tableHeaderColor" class="prolist" style="width: 100%">
-      <el-table-column type="index" width="55"></el-table-column>
+      <el-table-column type="index" width="55" :index="indexMethod"></el-table-column>
 
       <el-table-column label="订单号">
         <template slot-scope="scope">
-          <div class="info" style="text-align:left;">
+          <div class="info" >
             <p>{{scope.row.orderNo}}</p>
           </div>
         </template>
@@ -30,7 +30,6 @@
       </el-table-column>
       <el-table-column label="订单状态">
         <template slot-scope="scope">
-            <!-- <p>{{scope.row.statusDesc}}</p> -->
              <el-tag :type="scope.row.status === 10 ? 'danger' :'success' " disable-transitions>{{scope.row.status===10?'未付款':'已付款'}}</el-tag>
         </template>
       </el-table-column>
@@ -47,18 +46,20 @@
       </el-table-column>
 
       <el-table-column label="操作">
-
         <template slot-scope="scope">
-          <el-button @click="toDetail(scope.row.id)" type="text" size="small">查看</el-button>
+            <router-link :to="`/order/detail/${scope.row.orderNo}`">
+            <el-button type="text" size="small">查看详情</el-button>
+          </router-link> 
+          <!-- <el-button @click="toDetail(scope.row.id)" type="text" size="small">查看详情</el-button> -->
           <!--
-                  //两种写法方式都可以的
-                  <router-link :to="`/product/detail/${scope.row.id}`" >
-                      查看
-                  </router-link>
-                  -->
-          <router-link :to="`/product/save/${scope.row.id}`">
+            //两种写法方式都可以的
+            <router-link :to="`/product/detail/${scope.row.id}`" >
+                查看
+            </router-link>
+            -->
+          <!-- <router-link :to="`/product/save/${scope.row.id}`">
             <el-button type="text" size="small">编辑</el-button>
-          </router-link>
+          </router-link> -->
         </template>
 
       </el-table-column>
@@ -87,9 +88,9 @@ export default {
       listParam: {
         pageNum: 1,
         pageSize: 10,
+        orderNo:'',
         listType: 'list',
-        keyword: '',
-        searchType: 'productId',
+        searchType: 'orderNo',
       }
     }
   },
@@ -99,6 +100,10 @@ export default {
   },
 
   methods: {
+
+    indexMethod(index){
+        return index+1+((this.cur_page-1)*this.listParam.pageSize);
+    },
 
     loadOrderList() {
       _order.getOrderList(this.listParam).then((res) => {
@@ -121,14 +126,23 @@ export default {
     handleClick(row) {
       console.log(row);
     },
-   
     search() {
-      this.listParam.listType = 'search';
-      this.listParam.pageNum = 1;
-      this.listParam = Object.assign({}, this.listParam, {
-        keywords: this.searchKeyword
-      });
-      this.loadOrderList();
+        if(this.listParam.orderNo) {
+            this.listParam.listType = 'search';
+            this.listParam.pageNum = 1;
+            this.listParam = Object.assign({}, this.listParam, {
+                orderNo: this.listParam.orderNo
+            });
+            console.log(this.listParam);
+            this.loadOrderList();
+        } else {
+
+             this.$message({
+                message: '请输入订单编号进行查询',
+                type: 'warning'
+             });
+        }
+      
     },
     // 分页导航
     handleCurrentChange(val) {

@@ -12,15 +12,16 @@ class Order{
             data.pageNum = listParam.pageNum;
             data.pageSize = listParam.pageSize;
         } else if(listParam.listType==='search'){
-            url = '/manage/search/search.do'
+            url = '/manage/order/search.do'
             data.pageNum = listParam.pageNum;
             data.pageSize = listParam.pageSize;
             data.listType = listParam.listType;
-            data[listParam.searchType]  = listParam.keyword;
+            data.orderNo  = listParam.orderNo;
+            // data[listParam.searchType]  = listParam.orderNo;
         }
 
         return _mm.request({
-            type:'post',
+            // type:'post',
             url:url,
             data
         })
