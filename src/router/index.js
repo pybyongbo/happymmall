@@ -60,8 +60,13 @@ export default new Router({
         {
             path: '/order/index',
             component: resolve => require(['../views/Orderlist.vue'], resolve),
-            meta: { title: '订单管理' }
-        }
+            meta: { title: '订单列表' }
+        },
+        {
+          path: '/order/detail/:id',
+          component: resolve => require(['../views/Orderdetail.vue'], resolve),
+          meta: { title: '订单详情' }
+      }
       ]
     }
   ]

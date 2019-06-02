@@ -22,7 +22,7 @@
       <el-table-column label="品类ID" width="185" prop="id"> 
        
       </el-table-column>
-      <el-table-column label="品类名称" prop="name">
+      <el-table-column label="品类名称">
           <template slot-scope="scope" >  
               <p style="text-align:left;padding-left:50px;">{{scope.row.name}}</p>
           </template>
