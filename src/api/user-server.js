@@ -11,7 +11,6 @@ class User{
             data 
         });
     }
-
     // 退出登录
     logout(){
         return _mm.request({
@@ -19,13 +18,17 @@ class User{
             url     : '/user/logout.do'
         });
     }
-    getUserList(pageNum){
+    getUserList(listParam){
+        let data = {};
+        data.pageNum = listParam.pageNum;
+        data.pageSize = listParam.pageSize;
         return _mm.request({
             type    : 'post',
             url     : '/manage/user/list.do',
-            data    : {
-                pageNum : pageNum
-            }
+            data
+            // data    : {
+            //     pageNum : pageNum
+            // }
         });
     }
 

@@ -66,6 +66,11 @@ export default new Router({
           path: '/order/detail/:id',
           component: resolve => require(['../views/Orderdetail.vue'], resolve),
           meta: { title: '订单详情' }
+      },
+      {
+        path: '/user/index',
+        component: resolve => require(['../views/Userindex.vue'], resolve),
+        meta: { title: '用户列表' }
       }
       ]
     }

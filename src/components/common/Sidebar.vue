@@ -63,6 +63,18 @@ export default {
                           
                         ]
                     },
+                    {
+                        icon: 'el-icon-message',
+                        index: 'users',
+                        title: '用户相关',
+                        subs: [
+                            {
+                                index: '/user/index',
+                                title: '用户列表'
+                            },
+                          
+                        ]
+                    },
             ]
         }
     },

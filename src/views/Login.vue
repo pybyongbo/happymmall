@@ -23,7 +23,7 @@
 <script>
 // import {login} from 'api/user';
 import Util from "util/mm.js"
-import User from 'api/user-service.js'
+import User from 'api/user-server.js'
 
 const _mm    = new Util(),
 	_user  = new User();
