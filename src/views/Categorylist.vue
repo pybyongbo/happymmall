@@ -28,7 +28,7 @@
       </el-table-column>
     </el-table>
 
-     <div class="pagination" style="backgound:#fff;">
+     <div class="pagination" style="backgound:#fff;" v-if="!loading">
       <el-pagination background @current-change="handleCurrentChange" :current-page="cur_page" :page-size="10" layout="total,  prev, pager, next, jumper" :total="totalCount">
       </el-pagination>
     </div>

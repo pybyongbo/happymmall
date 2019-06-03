@@ -28,34 +28,17 @@
       </el-table-column>
       <el-table-column label="会员等级">
         <template slot-scope="scope">
-            <!-- <p><span style="color:red;font-weight:bold;font-size:16px;margin:0 8px;">{{scope.row.role==0?'普通会员':'超级会员'}}</span></p> -->
             <el-tag :type="scope.row.role ==0 ? 'warning' :'success' " disable-transitions>{{scope.row.role==0?'普通会员':'超级会员'}}</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column label="创建时间">
-        <template slot-scope="scope">
-            <p>{{scope.row.createTime}}</p>
-        </template>
-      </el-table-column>
+      <!-- <el-table-column label="创建时间" prop="createTime" :formatter="dateFormat">
+      </el-table-column> -->
 
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-            <router-link :to="`/order/detail/${scope.row.id}`">
-            <el-button type="text" size="small">查看详情</el-button>
-          </router-link> 
-          <!-- <el-button @click="toDetail(scope.row.id)" type="text" size="small">查看详情</el-button> -->
-          <!--
-            //两种写法方式都可以的
-            <router-link :to="`/product/detail/${scope.row.id}`" >
-                查看
-            </router-link>
-            -->
-          <!-- <router-link :to="`/product/save/${scope.row.id}`">
-            <el-button type="text" size="small">编辑</el-button>
-          </router-link> -->
-        </template>
-
+      <el-table-column label="创建时间" >
+         <template slot-scope="scope">
+            <p>{{datetimeFormat(scope.row.createTime)}}</p>
+         </template>
       </el-table-column>
     </el-table>
 
@@ -67,7 +50,9 @@
 </template>
 
 <script>
-import Util from "util/mm.js"
+import moment from 'moment';
+// let moment = require("moment");
+import Util from "util/mm.js";
 import User from 'api/user-server.js';
 const _mm = new Util();
 const _user = new User();
@@ -134,6 +119,23 @@ export default {
     toDetail(id) {
       this.$router.push({ path: '/product/detail/' + id });
       // this.$router.push({ name: "Goods_Upload_List" });
+    },
+    dateFormat(row, column) {
+      console.log(row, column)
+      const date = row[column.property]
+      console.log(date);
+      if (date === undefined) {
+        return ''
+      }
+      return moment(date).format('YYYY-MM-DD HH:mm:ss')
+    },
+
+    datetimeFormat(date) {
+      // if (date === undefined) {
+      //   return ''
+      // }
+     return date === undefined?'':moment(date).format('YYYY-MM-DD HH:mm:ss')
+      //return moment(date).format('YYYY-MM-DD HH:mm:ss')
     }
   }
 

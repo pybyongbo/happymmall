@@ -13,6 +13,7 @@
     "axios": "^0.15.3",
     "babel-polyfill": "^6.23.0",
     "element-ui": "2.3.3",
+    "moment": "^2.21.0",
     "simditor": "^2.3.6",
     "vue": "^2.5.2",
     "vue-quill-editor": "3.0.6",
