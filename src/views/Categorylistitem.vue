@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="col-lg-12">
-            <h1 class="page-header">品类管理--子分类 [当前商品分类ID：<span class="red">{{CategoryId}}</span>] --[父级分类名称:<span class="red">{{pcatename}}</span>]</h1>
+            <h1 class="page-header">品类管理--子分类 [当前商品分类ID：<span class="red">{{CategoryId}}</span>] --[父级分类名称:<span class="red" v-if="pcatename">{{pcatename}}</span>]</h1>
              <div class="go-back">
                  <router-link :to="`/category/index`" >
                     返回

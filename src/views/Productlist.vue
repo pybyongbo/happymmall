@@ -10,11 +10,11 @@
     </div>
 
     <div class="handle-box">
-      <el-select v-model="listParam.searchType" placeholder="筛选条件" class="handle-select mr10">
-        <el-option key="1" label="按商品ID查询" value="productId"></el-option>
-        <el-option key="2" label="按商品名称查询" value="productName"></el-option>
+      <el-select v-model="listParam.searchType" placeholder="筛选条件" class="handle-select mr10" @change="currentSel">
+        <el-option label="按商品ID查询" value="productId"></el-option>
+        <el-option label="按商品名称查询" value="productName"></el-option>
       </el-select>
-      <el-input v-model="listParam.keyword" placeholder="筛选关键词" class="handle-input mr10" clearable></el-input>
+      <el-input v-model="listParam.keyword" :placeholder="holdertext" class="handle-input mr10" clearable></el-input>
       <el-button type="primary" icon="search" @click="search">搜索</el-button>
     </div>
 
@@ -85,6 +85,7 @@ export default {
   name: 'productlist',
   data() {
     return {
+      holdertext:'请输入商品ID查询',
       loading:true,
       cur_page: 1,
       totalCount: 0,
@@ -105,6 +106,13 @@ export default {
 
   methods: {
 
+    currentSel(selVal) {
+        if (selVal === 'productId') {
+            this.holdertext = '请输入商品ID查询';
+        } else {
+            this.holdertext = '请输入商品名称查询';
+        }
+    },
     loadProductList() {
       _product.getProductList(this.listParam).then((res) => {
         this.list = res.list;
@@ -154,7 +162,15 @@ export default {
       this.listParam = Object.assign({}, this.listParam, {
         keywords: this.searchKeyword
       });
-      this.loadProductList();
+      if(this.searchKeyword) {
+          this.loadProductList();
+      } else {
+        this.$message({
+          message: '请输入关键字进行查询',
+          type: 'warning'
+        });
+      }
+      
     },
     // 分页导航
     handleCurrentChange(val) {

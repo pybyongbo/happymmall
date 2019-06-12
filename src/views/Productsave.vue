@@ -248,7 +248,6 @@ export default {
           return {
             name: "pic",
             uri: imgUri,
-            // url:  imgUri,
             url: res.imageHost + imgUri
           }
         });

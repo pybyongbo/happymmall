@@ -61,7 +61,7 @@
                                 <span>相关技术栈</span>
                             </div>
 
-                            <div v-for="o in skillItem" :key="o" class="text item">
+                            <div v-for="(o,index) in skillItem" :key="index" class="text item">
                               {{ o.name }}
                             </div>
                             
