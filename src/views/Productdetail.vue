@@ -10,7 +10,7 @@
         </div>
 
         <div class="pro-detail">
-          <el-form :model="productDetail" disabled ref="ruleForm" :inline=true class="demo-ruleForm">
+          <el-form :model="productDetail" disabled ref="ruleForm" :inline=true class="demo-ruleForm detailpage">
             <div class="form-group">
                 <el-form-item label="商品名称:">
                      <p>{{productDetail.name}}</p>
