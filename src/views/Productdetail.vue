@@ -185,17 +185,15 @@ export default {
 .pro-detail .form-group{
     text-align: left;
     overflow: hidden;
-
     line-height: 40px;
 }
 
 .pro-detail .form-group label{
-    float:left;
+    float:left!important;
 }
 .pro-detail .form-group{
     width:100%;
     margin-left:0px;
-    /* float:left; */
     overflow: hidden;
 }
 

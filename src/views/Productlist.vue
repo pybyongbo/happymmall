@@ -160,9 +160,9 @@ export default {
       this.listParam.listType = 'search';
       this.listParam.pageNum = 1;
       this.listParam = Object.assign({}, this.listParam, {
-        keywords: this.searchKeyword
+        keywords: this.listParam.keyword
       });
-      if(this.searchKeyword) {
+      if(this.listParam.keyword) {
           this.loadProductList();
       } else {
         this.$message({

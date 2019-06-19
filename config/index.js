@@ -17,7 +17,7 @@ module.exports = {
         // pathRewrite: {
         //     '^/manage': ''
         // }
-    }
+      }
     },
 
     // Various Dev Server settings
@@ -52,12 +52,21 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    proxyTable: {
+      '/manage': {
+        target: 'http://admintest.happymmall.com/',
+        changeOrigin: true,
+        // pathRewrite: {
+        //     '^/manage': ''
+        // }
+      }
+    },
 
     /**
      * Source Maps
      */
 
-    productionSourceMap: true,
+    productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 
