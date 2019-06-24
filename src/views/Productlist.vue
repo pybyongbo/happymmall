@@ -10,18 +10,35 @@
     </div>
 
     <div class="handle-box">
-      <el-select v-model="listParam.searchType" placeholder="筛选条件" class="handle-select mr10" @change="currentSel">
+      <el-select
+        v-model="listParam.searchType"
+        placeholder="筛选条件"
+        class="handle-select mr10"
+        @change="currentSel"
+      >
         <el-option label="按商品ID查询" value="productId"></el-option>
         <el-option label="按商品名称查询" value="productName"></el-option>
       </el-select>
-      <el-input v-model="listParam.keyword" :placeholder="holdertext" class="handle-input mr10" clearable></el-input>
+      <el-input
+        v-model="listParam.keyword"
+        :placeholder="holdertext"
+        class="handle-input mr10"
+        clearable
+      ></el-input>
       <el-button type="primary" icon="search" @click="search">搜索</el-button>
     </div>
 
-    <el-table :data="list" border v-loading="loading" :row-style="tableRowStyle" :header-cell-style="tableHeaderColor" class="prolist" style="width: 100%">
+    <el-table
+      :data="list"
+      border
+      v-loading="loading"
+      :row-style="tableRowStyle"
+      :header-cell-style="tableHeaderColor"
+      class="prolist"
+      style="width: 100%"
+    >
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="id" label="ID" width="80">
-      </el-table-column>
+      <el-table-column prop="id" label="ID" width="80"></el-table-column>
 
       <el-table-column label="信息">
         <template slot-scope="scope">
@@ -30,74 +47,89 @@
             {{scope.row.subtitle}}
           </div>
         </template>
-
       </el-table-column>
       <el-table-column label="价格(¥)">
-        <template slot-scope="scope">
-          ¥{{scope.row.price}}元
-        </template>
+        <template slot-scope="scope">¥{{scope.row.price}}元</template>
       </el-table-column>
-      <el-table-column prop="status" label="状态" :filters="[{ text: '在售', value: '1' }, { text: '已下架', value: '2' }]" :filter-method="filterTag" filter-placement="bottom-end">
+      <el-table-column
+        prop="status"
+        label="状态"
+        :filters="[{ text: '在售', value: '1' }, { text: '已下架', value: '2' }]"
+        :filter-method="filterTag"
+        filter-placement="bottom-end"
+      >
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'" disable-transitions>{{scope.row.status===1?'在售':'已下架'}}</el-tag>
+          <el-tag
+            :type="scope.row.status === 1 ? 'success' : 'danger'"
+            disable-transitions
+          >{{scope.row.status===1?'在售':'已下架'}}</el-tag>
           <el-popover width="160" placement="right" trigger="hover">
             <p>商品上架表示在售状态,前台可以看到,已下架表示非在售状态,前台不显示.</p>
             <div style="text-align: center; margin: 10px auto">
-              <el-button type="primary" size="mini" @click="onProductStatusChange(scope.row.id,scope.row.status)">确定{{scope.row.status===1?'下架':'上架'}}</el-button>
+              <el-button
+                type="primary"
+                size="mini"
+                @click="onProductStatusChange(scope.row.id,scope.row.status)"
+              >确定{{scope.row.status===1?'下架':'上架'}}</el-button>
             </div>
 
             <el-button slot="reference" size="small">{{scope.row.status===1?'下架':'上架'}}</el-button>
           </el-popover>
         </template>
-
       </el-table-column>
       <el-table-column label="操作">
-
         <template slot-scope="scope">
           <el-button @click="toDetail(scope.row.id)" type="text" size="small">查看</el-button>
           <!--
-                  //两种写法方式都可以的
-                  <router-link :to="`/product/detail/${scope.row.id}`" >
-                      查看
-                  </router-link>
-                  -->
+          //两种写法方式都可以的
+          <router-link :to="`/product/detail/${scope.row.id}`" >
+              查看
+          </router-link>
+          -->
           <router-link :to="`/product/save/${scope.row.id}`">
             <el-button type="text" size="small">编辑</el-button>
           </router-link>
         </template>
-
       </el-table-column>
     </el-table>
 
     <div class="pagination" style="backgound:#fff;">
-      <el-pagination background @current-change="handleCurrentChange" @size-change="handleSizeChange" :current-page="cur_page" :page-sizes="[10, 50, 100]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
-      </el-pagination>
+      <el-pagination
+        background
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
+        :current-page="cur_page"
+        :page-sizes="[10, 50, 100]"
+        :page-size="10"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalCount"
+      ></el-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import Util from "util/mm.js"
-import Product from 'api/product-server.js';
+import Util from "util/mm.js";
+import Product from "api/product-server.js";
 const _mm = new Util();
 const _product = new Product();
 export default {
-  name: 'productlist',
+  name: "productlist",
   data() {
     return {
-      holdertext:'请输入商品ID查询',
-      loading:true,
+      holdertext: "请输入商品ID查询",
+      loading: true,
       cur_page: 1,
       totalCount: 0,
       list: [],
       listParam: {
         pageNum: 1,
         pageSize: 10,
-        listType: 'list',
-        keyword: '',
-        searchType: 'productId',
+        listType: "list",
+        keyword: "",
+        searchType: "productId"
       }
-    }
+    };
   },
 
   created() {
@@ -105,49 +137,51 @@ export default {
   },
 
   methods: {
-
     currentSel(selVal) {
-        if (selVal === 'productId') {
-            this.holdertext = '请输入商品ID查询';
-        } else {
-            this.holdertext = '请输入商品名称查询';
-        }
+      if (selVal === "productId") {
+        this.holdertext = "请输入商品ID查询";
+      } else {
+        this.holdertext = "请输入商品名称查询";
+      }
     },
     loadProductList() {
-      _product.getProductList(this.listParam).then((res) => {
+      _product.getProductList(this.listParam).then(res => {
         this.list = res.list;
         this.loading = false;
         this.totalCount = res.total;
-      })
+      });
     },
     // 修改table tr行的背景色
     tableRowStyle({ row, rowIndex }) {
-      return 'text-align:center;'
+      return "text-align:center;";
     },
     // 修改table header的背景色
     tableHeaderColor({ row, column, rowIndex, columnIndex }) {
       if (rowIndex === 0) {
-        return 'background-color:lightblue;color:#fff;font-weight:500;text-align:center;height:30px;line-height:30px;'
+        return "background-color:lightblue;color:#fff;font-weight:500;text-align:center;height:30px;line-height:30px;";
       }
     },
 
     // 改变商品状态，上架 / 下架
     onProductStatusChange(productId, status) {
-      let newStatus = status === 1 ? 2 : 1
-      _product.setProductStatus(productId, newStatus).then((res) => {
-        // _mm.successTips(res);
-        this.$message({
-          message: res,
-          type: 'success'
-        });
-        this.loadProductList();
-      }, (errMsg) => {
-        this.$message({
-          message: res,
-          type: 'error'
-        });
-        // _mm.errorTips(errMsg);
-      })
+      let newStatus = status === 1 ? 2 : 1;
+      _product.setProductStatus(productId, newStatus).then(
+        res => {
+          // _mm.successTips(res);
+          this.$message({
+            message: res,
+            type: "success"
+          });
+          this.loadProductList();
+        },
+        errMsg => {
+          this.$message({
+            message: res,
+            type: "error"
+          });
+          // _mm.errorTips(errMsg);
+        }
+      );
     },
 
     handleClick(row) {
@@ -157,20 +191,19 @@ export default {
       return row.status === value;
     },
     search() {
-      this.listParam.listType = 'search';
+      this.listParam.listType = "search";
       this.listParam.pageNum = 1;
       this.listParam = Object.assign({}, this.listParam, {
-        keywords: this.searchKeyword
+        keyword: this.listParam.keyword
       });
-      if(this.searchKeyword) {
-          this.loadProductList();
+      if (this.listParam.keyword) {
+        this.loadProductList();
       } else {
         this.$message({
-          message: '请输入关键字进行查询',
-          type: 'warning'
+          message: "请输入关键字进行查询",
+          type: "warning"
         });
       }
-      
     },
     // 分页导航
     handleCurrentChange(val) {
@@ -185,12 +218,11 @@ export default {
       this.loadProductList();
     },
     toDetail(id) {
-      this.$router.push({ path: '/product/detail/' + id });
+      this.$router.push({ path: "/product/detail/" + id });
       // this.$router.push({ name: "Goods_Upload_List" });
     }
   }
-
-}
+};
 </script>
 <style scoped>
 .col-lg-12 {
@@ -204,7 +236,7 @@ export default {
   font-size: 18px;
   color: #666;
   float: left;
-  line-height:40px;
+  line-height: 40px;
 }
 
 .col-lg-12 .page-header-right {
@@ -227,7 +259,7 @@ export default {
 
 .del-dialog-cnt {
   font-size: 16px;
-  text-align: center
+  text-align: center;
 }
 </style>
 
