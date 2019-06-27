@@ -194,10 +194,10 @@ export default {
       this.listParam.listType = "search";
       this.listParam.pageNum = 1;
       this.listParam = Object.assign({}, this.listParam, {
-        keyword: this.listParam.keyword
+        keywords: this.listParam.keyword
       });
-      if (this.listParam.keyword) {
-        this.loadProductList();
+      if(this.listParam.keyword) {
+          this.loadProductList();
       } else {
         this.$message({
           message: "请输入关键字进行查询",

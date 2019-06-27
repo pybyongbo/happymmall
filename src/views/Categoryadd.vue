@@ -133,8 +133,6 @@ export default {
     float: right;
     background:url('../assets/back.png') no-repeat left center;
     padding-left:40px;
-
-
 }
 
 .demo-ruleForm{
@@ -159,6 +157,9 @@ export default {
 </style>
 
 <style>
+.demo-ruleForm .el-form-item__label{
+    float:left!important;
+}
 .demo-ruleForm .el-form-item__content{
     margin-left:10px!important;
     float:left;

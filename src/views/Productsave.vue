@@ -12,10 +12,7 @@
     <div class="pro-detail">
       <el-form :model="productInfo" :rules="rules" ref="productForm" label-width="100px" class="demo-ruleForm">
       <div class="form-group">
-        <!-- <label for="name">商品名称:</label>
-        <div class="con">
-          <el-input v-model="productInfo.name"></el-input>
-        </div> -->
+       
           <el-form-item label="商品名称:" prop="name">
             <el-input v-model="productInfo.name"></el-input>
           </el-form-item>
@@ -389,5 +386,15 @@ export default {
   width: 240px;
 }
 </style>
+<style>
+.pro-detail .el-form-item__content
+{
+  width:80%;
+}
+.detailpage .el-form-item__content{
+  width:auto!important;
+}
+</style>
+
 
 

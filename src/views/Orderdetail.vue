@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="pro-detail">
-          <el-form :model="orderDetail" disabled ref="ruleForm" label-width="80px" :inline=true class="demo-ruleForm">
+          <el-form :model="orderDetail" disabled ref="ruleForm" label-width="80px" :inline=true class="demo-ruleForm detailpage">
             <div class="form-group">
                 <el-form-item label="订单号:">
                      <p>{{orderDetail.orderNo}}</p>

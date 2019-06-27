@@ -10,7 +10,7 @@
         </div>
 
         <div class="pro-detail">
-          <el-form :model="productDetail" disabled ref="ruleForm" :inline=true class="demo-ruleForm">
+          <el-form :model="productDetail" disabled ref="ruleForm" :inline=true class="demo-ruleForm detailpage">
             <div class="form-group">
                 <el-form-item label="商品名称:">
                      <p>{{productDetail.name}}</p>
@@ -185,17 +185,15 @@ export default {
 .pro-detail .form-group{
     text-align: left;
     overflow: hidden;
-
     line-height: 40px;
 }
 
 .pro-detail .form-group label{
-    float:left;
+    float:left!important;
 }
 .pro-detail .form-group{
     width:100%;
     margin-left:0px;
-    /* float:left; */
     overflow: hidden;
 }
 
